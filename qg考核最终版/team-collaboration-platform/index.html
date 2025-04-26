@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>团队协作与管理平台</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <!-- 添加字体图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 主内容 -->
+        <main class="main-content">
+            <h1>团队协作与管理平台</h1>
+            <p>欢迎来到团队协作与管理平台，这里可以管理团队成员、小组以及任务。</p>
+
+            <!-- 顶部工具栏 -->
+            <div class="top-toolbar">
+                <div class="search-bar">
+                    <input type="text" placeholder="搜索...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="notification-area">
+                    <div class="notification-icon" id="notification-toggle">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count" id="notification-count">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 团队与小组管理 -->
+            <section class="management-section">
+                <h2>团队与小组管理</h2>
+
+                <!-- 添加团队成员 -->
+                <div>
+                    <h3>添加团队成员</h3>
+                    <button id="open-add-member-form" class="btn">添加成员</button>
+                    <div id="member-list" class="list-container">
+                        <!-- 动态生成的成员列表 -->
+                    </div>
+                </div>
+
+                <!-- 创建小组 -->
+                <div>
+                    <h3>小组管理</h3>
+                    <button id="open-create-group-form" class="btn">创建小组</button>
+                    <div id="group-list" class="list-container">
+                        <!-- 动态生成的小组列表 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 任务管理与分支管理 -->
+            <section class="management-section">
+                <h2>任务管理与分支管理</h2>
+
+                <!-- 创建任务 -->
+                <div>
+                    <h3>任务内容</h3>
+                    <button id="open-create-task-form" class="btn">创建任务</button>
+                    <!-- 任务列表 -->
+                    <div id="task-list" class="list-container">
+                        <!-- 动态生成的任务 -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 通知中心 -->
+    <div id="notification-center" class="notification-center">
+        <div class="notification-header">
+            <h3>通知中心</h3>
+            <button id="close-notification-center" class="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="notification-filters">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="task">任务</button>
+            <button class="filter-btn" data-filter="comment">评论</button>
+            <button class="filter-btn" data-filter="merge">合并请求</button>
+        </div>
+        <div class="notification-list" id="notification-list">
+            <!-- 通知会动态生成 -->
+            <div class="empty-notification">
+                <i class="fas fa-bell-slash"></i>
+                <p>暂无通知</p>
+            </div>
+        </div>
+        <div class="notification-actions">
+            <button id="mark-all-read" class="btn">全部标记为已读</button>
+        </div>
+    </div>
+
+    <!-- 添加团队成员表单 -->
+    <div id="add-member-form" class="modal">
+        <div class="modal-content">
+            <h2>添加团队成员</h2>
+            <form id="member-form">
+                <div class="form-group">
+                    <label for="member-name">姓名</label>
+                    <input type="text" id="member-name" placeholder="请输入姓名" required>
+                </div>
+                <div class="form-group">
+                    <label for="member-gender">性别</label>
+                    <select id="member-gender" required>
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="member-age">年龄</label>
+                    <input type="number" id="member-age" placeholder="请输入年龄" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">添加</button>
+                    <button type="button" id="close-add-member-form" class="btn cancel-btn">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 创建小组表单 -->
+    <div id="create-group-form" class="modal">
+        <div class="modal-content">
+            <h2>创建小组</h2>
+            <form id="group-form">
+                <div class="form-group">
+                    <label for="group-name">小组名称</label>
+                    <input type="text" id="group-name" placeholder="请输入小组名称" required>
+                </div>
+                <div class="form-group">
+                    <label for="group-description">小组描述</label>
+                    <textarea id="group-description" placeholder="请输入小组描述" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="group-members">选择小组成员</label>
+                    <select id="group-members" multiple required>
+                        <!-- 动态生成成员选项 -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="group-leader">选择组长</label>
+                    <select id="group-leader" required>
+                        <!-- 动态生成成员选项 -->
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">创建</button>
+                    <button type="button" id="close-group-form" class="btn cancel-btn">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 创建任务表单 -->
+    <div id="create-task-form" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>创建任务</h2>
+            <form id="task-form">
+                <div class="form-group">
+                    <label for="task-title">标题</label>
+                    <input type="text" id="task-title" placeholder="请输入任务标题" required>
+                </div>
+                <div class="form-group">
+                    <label for="task-description">描述</label>
+                    <textarea id="task-description" placeholder="请输入任务描述" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="task-group">所属小组</label>
+                    <select id="task-group">
+                        <option value="">请选择小组</option>
+                        <!-- 动态生成任务小组选项 -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="task-dependencies">依赖任务</label>
+                    <select id="task-dependencies" multiple>
+                        <option value="">请选择依赖任务</option>
+                        <!-- 动态生成任务选项 -->
+                    </select>
+                    <small>选择此任务依赖的其他任务。这些任务必须完成后才能开始当前任务。</small>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">创建</button>
+                    <button type="button" id="close-task-form" class="btn cancel-btn">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 任务详情模态框 -->
+    <div id="task-details-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 id="task-details-title">任务详情</h2>
+            <p id="task-details-description"></p>
+
+            <!-- 任务进度条 -->
+            <div class="task-section progress-section">
+                <h3>进度</h3>
+                <div class="progress-bar">
+                    <div id="progress-bar-fill" style="width: 0%"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="progress-percentage">更新进度 (0-100%)</label>
+                    <div style="display: flex; align-items: center;">
+                        <input type="number" id="progress-percentage" min="0" max="100" placeholder="进度">
+                        <button id="update-progress-btn" class="btn">更新</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 任务依赖管理 -->
+            <div class="task-section">
+                <h3>任务依赖</h3>
+                <div class="dependency-container">
+                    <div class="dependency-section">
+                        <h4>前置依赖</h4>
+                        <ul id="prerequisite-tasks-list" class="dependency-list">
+                            <!-- 动态生成的依赖任务列表 -->
+                            <li class="empty-list-message">无前置依赖任务</li>
+                        </ul>
+                    </div>
+                    <div class="dependency-section">
+                        <h4>后置任务</h4>
+                        <ul id="dependent-tasks-list" class="dependency-list">
+                            <!-- 动态生成的后置任务列表 -->
+                            <li class="empty-list-message">无后置依赖任务</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="dependency-actions">
+                    <div class="form-group">
+                        <label for="add-dependency">添加依赖</label>
+                        <select id="add-dependency">
+                            <option value="">选择要添加的依赖任务</option>
+                            <!-- 动态生成可选任务 -->
+                        </select>
+                        <button id="add-dependency-btn" class="btn">添加依赖</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="remove-dependency">移除依赖</label>
+                        <select id="remove-dependency">
+                            <option value="">选择要移除的依赖任务</option>
+                            <!-- 动态生成当前依赖任务 -->
+                        </select>
+                        <button id="remove-dependency-btn" class="btn cancel-btn">移除依赖</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分支管理 -->
+            <div class="task-section">
+                <h3>分支管理</h3>
+                <ul id="branch-list">
+                    <!-- 动态生成的分支列表 -->
+                </ul>
+
+                <div class="form-group">
+                    <label for="new-branch-name">新建分支</label>
+                    <input type="text" id="new-branch-name" placeholder="分支名称">
+                    <textarea id="new-branch-content" placeholder="分支内容"></textarea>
+                    <button id="add-branch-btn" class="btn">添加分支</button>
+                </div>
+            </div>
+
+            <!-- 合并请求 -->
+            <div class="task-section">
+                <h3>合并请求</h3>
+                <ul id="merge-requests-list">
+                    <!-- 动态生成的合并请求列表 -->
+                </ul>
+
+                <div class="form-group">
+                    <label for="merge-source-branch">源分支</label>
+                    <input type="text" id="merge-source-branch" placeholder="源分支名称">
+                    <label for="merge-target-branch">目标分支</label>
+                    <input type="text" id="merge-target-branch" placeholder="目标分支名称">
+                    <button id="submit-merge-request-btn" class="btn">提交合并请求</button>
+                </div>
+            </div>
+
+            <!-- 评论区 -->
+            <div id="comments-section" class="task-section">
+                <h3>评论</h3>
+                <ul id="comments-list">
+                    <!-- 动态生成的评论列表 -->
+                </ul>
+
+                <div class="form-group">
+                    <textarea id="new-comment" placeholder="添加评论..."></textarea>
+                    <button id="add-comment-btn" class="btn">添加评论</button>
+                </div>
+            </div>
+
+            <!-- 历史记录 -->
+            <div class="task-section">
+                <h3>历史记录</h3>
+                <ul id="task-history-list">
+                    <!-- 动态生成的历史记录 -->
+                </ul>
+            </div>
+
+            <!-- 冲突处理 -->
+            <div id="conflict-section" class="task-section" style="display: none;">
+                <h3>冲突</h3>
+                <ul id="conflict-list">
+                    <!-- 动态生成的冲突列表 -->
+                </ul>
+            </div>
+
+            <!-- 任务完成按钮 -->
+            <div class="task-section complete-task-section">
+                <div class="task-completion-status" id="task-completion-status">
+                    <span class="status-badge incomplete">进行中</span>
+                </div>
+                <button id="complete-task-btn" class="btn complete-btn">
+                    <i class="fas fa-check-circle"></i> 标记为已完成
+                </button>
+                <button id="reopen-task-btn" class="btn reopen-btn" style="display: none;">
+                    <i class="fas fa-redo"></i> 重新打开任务
+                </button>
+            </div>
+
+            <div class="actions-bar">
+                <button id="rollback-task-btn" class="btn">回退到上一版本</button>
+                <button id="close-task-details" class="btn cancel-btn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 实时状态指示器 -->
+    <div id="realtime-status" class="realtime-status">
+        <div class="status-indicator online">
+            <i class="fas fa-circle"></i> 实时连接已建立
+        </div>
+    </div>
+
+    <!-- 弹出通知 -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="assets/js/scripts.js"></script>
+    <script src="assets/js/notifications.js"></script>
+    <script src="assets/js/realtime.js"></script>
+</body>
+
+</html>

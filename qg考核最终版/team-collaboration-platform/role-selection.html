@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>身份选择</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: #1a1a1a;
+            margin-bottom: 3rem;
+            text-align: center;
+            padding: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+        }
+
+        .role-card {
+            width: 100%;
+            max-width: 350px;
+            padding: 2.5rem 2rem;
+            margin: 1rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .admin-card {
+            background: linear-gradient(145deg, #89cff0, #6c7ae0);
+            color: white;
+        }
+
+        .user-card {
+            background: linear-gradient(145deg, #81e081, #45a945);
+            color: white;
+        }
+
+        .role-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .role-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .role-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .role-description {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+        }
+
+        .action-btn {
+            padding: 0.8rem 1.5rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .admin-btn {
+            background: #4a90e2;
+            box-shadow: 0 2px 4px rgba(74, 144, 226, 0.3);
+        }
+
+        .user-btn {
+            background: #4cd137;
+            box-shadow: 0 2px 4px rgba(76, 209, 55, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="title">选择你的身份</h1>
+    <div class="container">
+        <div class="role-card admin-card" id="adminCard">
+            <div class="role-icon">🔧</div>
+            <h2 class="role-title">管理员</h2>
+            <p class="role-description">拥有系统最高管理权限</p>
+            <button class="action-btn admin-btn">进入管理后台</button>
+        </div>
+
+        <div class="role-card user-card" id="userCard">
+            <div class="role-icon">👤</div>
+            <h2 class="role-title">普通用户</h2>
+            <p class="role-description">享受普通用户服务与功能</p>
+            <button class="action-btn user-btn">进入用户中心</button>
+        </div>
+    </div>
+
+    <script>
+        // 点击事件处理
+        document.getElementById('adminCard').addEventListener('click', () => {
+            // 这里可以替换为实际的路由跳转
+            console.log('前往管理员页面');
+            window.location.href = 'index.html';
+        });
+
+        document.getElementById('userCard').addEventListener('click', () => {
+            // 这里可以替换为实际的路由跳转
+            console.log('前往用户页面');
+            window.location.href = 'user-dashboard.html';
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户任务中心</title>
+    <link rel="stylesheet" href="assets/css/user-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 顶部导航栏 -->
+        <header class="top-nav">
+            <div class="user-info">
+                <span id="user-name">用户名</span>
+                <span id="user-role">角色</span>
+            </div>
+            <div class="nav-controls">
+                <div class="search-bar">
+                    <input type="text" placeholder="搜索任务...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="notification-area">
+                    <div class="notification-icon" id="notification-toggle">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count" id="notification-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主要内容区 -->
+        <main class="main-content">
+            <!-- 任务筛选器 -->
+            <div class="task-filters">
+                <button class="filter-btn active" data-filter="all">全部任务</button>
+                <button class="filter-btn" data-filter="assigned">我的任务</button>
+                <button class="filter-btn" data-filter="group">小组任务</button>
+                <button class="filter-btn" data-filter="completed">已完成</button>
+            </div>
+
+            <!-- 任务列表 -->
+            <div class="task-list-container">
+                <div class="task-list-header">
+                    <h2>任务列表</h2>
+                    <div class="task-sort">
+                        <select id="task-sort">
+                            <option value="due-date">截止日期</option>
+                            <option value="priority">优先级</option>
+                            <option value="progress">进度</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="task-list" class="task-list">
+                    <!-- 任务卡片将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 任务详情模态框 -->
+    <div id="task-details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="task-title">任务标题</h2>
+                <button class="close-btn" id="close-task-details"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="task-details-content">
+                <!-- 任务基本信息 -->
+                <div class="task-info">
+                    <div class="info-item">
+                        <span class="label">负责人：</span>
+                        <span id="task-assignee">未分配</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">截止日期：</span>
+                        <span id="task-due-date">未设置</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">优先级：</span>
+                        <span id="task-priority">普通</span>
+                    </div>
+                </div>
+
+                <!-- 任务进度 -->
+                <div class="task-progress">
+                    <h3>进度</h3>
+                    <div class="progress-bar">
+                        <div id="progress-bar-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-controls">
+                        <input type="number" id="progress-input" min="0" max="100" placeholder="输入进度">
+                        <button id="update-progress" class="btn">更新进度</button>
+                    </div>
+                </div>
+
+                <!-- 任务描述 -->
+                <div class="task-description">
+                    <h3>描述</h3>
+                    <p id="task-description">任务描述内容</p>
+                </div>
+
+                <!-- 分支管理 -->
+                <div class="task-branches">
+                    <h3>分支管理</h3>
+                    <div class="branch-list" id="branch-list">
+                        <!-- 分支列表将通过JavaScript动态生成 -->
+                    </div>
+                    <div class="branch-controls">
+                        <input type="text" id="new-branch-name" placeholder="新分支名称">
+                        <button id="create-branch" class="btn">创建分支</button>
+                    </div>
+                </div>
+
+                <!-- 合并请求 -->
+                <div class="merge-requests">
+                    <h3>合并请求</h3>
+                    <div class="merge-request-list" id="merge-request-list">
+                        <!-- 合并请求列表将通过JavaScript动态生成 -->
+                    </div>
+                    <div class="merge-controls">
+                        <select id="source-branch">
+                            <option value="">选择源分支</option>
+                        </select>
+                        <select id="target-branch">
+                            <option value="">选择目标分支</option>
+                        </select>
+                        <button id="create-merge-request" class="btn">创建合并请求</button>
+                    </div>
+                </div>
+
+                <!-- 评论区 -->
+                <div class="task-comments">
+                    <h3>评论</h3>
+                    <div class="comment-list" id="comment-list">
+                        <!-- 评论列表将通过JavaScript动态生成 -->
+                    </div>
+                    <div class="comment-input">
+                        <textarea id="new-comment" placeholder="添加评论..."></textarea>
+                        <button id="submit-comment" class="btn">发表评论</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知中心 -->
+    <div id="notification-center" class="notification-center">
+        <div class="notification-header">
+            <h3>通知中心</h3>
+            <button id="close-notifications" class="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="notification-list" id="notification-list">
+            <!-- 通知列表将通过JavaScript动态生成 -->
+        </div>
+        <div class="notification-actions">
+            <button id="mark-all-read" class="btn">全部标记为已读</button>
+        </div>
+    </div>
+
+    <!-- 实时状态指示器 -->
+    <div id="realtime-status" class="realtime-status">
+        <div class="status-indicator">
+            <i class="fas fa-circle"></i>
+            <span>实时连接状态</span>
+        </div>
+    </div>
+
+    <!-- 脚本引用 -->
+    <script src="assets/js/user-dashboard.js"></script>
+    <script src="assets/js/realtime.js"></script>
+    <script src="assets/js/notifications.js"></script>
+</body>
+
+</html>

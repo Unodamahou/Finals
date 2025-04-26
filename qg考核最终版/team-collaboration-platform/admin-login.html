@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户登录</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="assets/css/login.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-box login">
+            <form id="loginForm">
+                <h1>用户登录</h1>
+                <div class="input-box">
+                    <input type="email" id="loginEmail" placeholder="邮箱" required />
+                    <i class="bx bxs-envelope"></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="password" id="loginPassword" placeholder="密码" required />
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
+
+                <div class="forgot-link">
+                    <a href="#">忘记密码？</a>
+                </div>
+
+                <button type="submit" class="btn">登录</button>
+
+                <div id="loginError" class="error-message"></div>
+            </form>
+        </div>
+
+        <div class="form-box register">
+            <form id="registerForm">
+                <h1>用户注册</h1>
+                <div class="input-box">
+                    <input type="text" id="registerUsername" placeholder="用户名" required />
+                    <i class="bx bxs-user"></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="email" id="registerEmail" placeholder="邮箱" required />
+                    <i class="bx bxs-envelope"></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="password" id="registerPassword" placeholder="密码" required />
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
+
+                <button type="submit" class="btn">注册</button>
+
+                <div id="registerError" class="error-message"></div>
+            </form>
+        </div>
+
+        <div class="toggle-box">
+            <div class="toggle-panel toggle-left">
+                <h1>欢迎回来！</h1>
+                <p>还没有账号？</p>
+                <button class="btn register-btn">注册</button>
+            </div>
+
+            <div class="toggle-panel toggle-right">
+                <h1>你好！</h1>
+                <p>已有账号？</p>
+                <button class="btn login-btn">登录</button>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/login.js"></script>
+</body>
+
+</html>
