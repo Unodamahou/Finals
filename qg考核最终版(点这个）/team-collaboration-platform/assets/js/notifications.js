@@ -324,6 +324,87 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+
+    // ...在 markAllNotificationsAsRead 和 renderNotifications 之间添加...
+
+    // 删除通知
+    const deleteNotification = async (notificationId) => {
+        // 本地删除
+        notifications = notifications.filter(n => n.id !== notificationId);
+        unreadCount = notifications.filter(n => !n.read).length;
+
+        // 如果使用本地存储，保存更改
+        if (useLocalStorage) {
+            localStorage.setItem(NOTIFICATIONS_STORAGE_KEY, JSON.stringify(notifications));
+        } else {
+            // 如果有API，尝试调用API删除
+            try {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    await fetch(`${API_BASE_URL}/notifications/${notificationId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                }
+            } catch (error) {
+                // 失败时不影响本地删除
+            }
+        }
+
+        // 更新UI
+        updateNotificationBadge();
+        renderNotifications();
+    };
+
+
+
+    // 一键删除所有通知
+    const deleteAllNotifications = async () => {
+        // 本地清空
+        notifications = [];
+        unreadCount = 0;
+
+        // 如果使用本地存储，清空本地
+        if (useLocalStorage) {
+            localStorage.setItem(NOTIFICATIONS_STORAGE_KEY, JSON.stringify([]));
+        } else {
+            // 如果有API，尝试调用API批量删除
+            try {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    await fetch(`${API_BASE_URL}/notifications`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                }
+            } catch (error) {
+                // 失败时不影响本地清空
+            }
+        }
+
+        // 更新UI
+        updateNotificationBadge();
+        renderNotifications();
+    };
+
+
+
+    // === 这里插入事件绑定 ===
+    const deleteAllBtn = document.getElementById('delete-all-notifications');
+    if (deleteAllBtn) {
+        deleteAllBtn.addEventListener('click', () => {
+            if (confirm('确定要删除所有通知吗？此操作不可恢复。')) {
+                deleteAllNotifications();
+            }
+        });
+    }
+
+
+
     // 渲染通知列表
     const renderNotifications = () => {
         if (!notificationList) return;
@@ -384,6 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="notification-time">${formattedDate}</div>
                 </div>
                 ${!notification.read ? '<div class="notification-mark-read"><i class="fas fa-check"></i></div>' : ''}
+                <div class="notification-delete" title="删除"><i class="fas fa-trash-alt"></i></div>
             `;
 
             // 添加点击事件处理
@@ -416,6 +498,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                         }
                     }
+                });
+            }
+
+            // 删除按钮事件
+            const deleteBtn = item.querySelector('.notification-delete');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteNotification(notification.id);
                 });
             }
 
@@ -493,15 +584,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // 切换通知面板显示
     if (notificationToggle) {
         notificationToggle.addEventListener('click', () => {
-            const notificationPanel = document.getElementById('notification-panel');
+            const notificationPanel = document.getElementById('notification-center');
             if (notificationPanel) {
-                const isOpen = notificationPanel.classList.toggle('open');
+                const isOpen = notificationPanel.classList.toggle('active');
 
                 // 打开通知面板时，加载最新通知
                 if (isOpen) {
                     loadNotifications();
                 }
             }
+        });
+    }
+
+
+    // 绑定通知中心关闭按钮事件
+    const closePanelBtn = document.getElementById('close-notification-center');
+    const notificationPanel = document.getElementById('notification-center');
+    if (closePanelBtn && notificationPanel) {
+        closePanelBtn.addEventListener('click', () => {
+            notificationPanel.classList.remove('active');
         });
     }
 
